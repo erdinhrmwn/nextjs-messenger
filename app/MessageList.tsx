@@ -7,7 +7,11 @@ import { pusherClient } from "../pusher";
 import fetcher from "../utils/fetchMessages";
 import MessageComponent from "./MessageComponent";
 
-const MessageList = () => {
+type Props = {
+	initialMessages: Message[];
+};
+
+const MessageList = ({ initialMessages }: Props) => {
 	const { data: messages, error, mutate } = useSWR("fetchMessages", fetcher);
 
 	useEffect(() => {
@@ -34,7 +38,7 @@ const MessageList = () => {
 
 	return (
 		<div className='space-y-5 px-5 pt-8 pb-32 max-w-2xl xl:max-w-4xl mx-auto'>
-			{messages?.map((message) => (
+			{(messages || initialMessages)?.map((message) => (
 				<MessageComponent message={message} key={message.id} />
 			))}
 		</div>
