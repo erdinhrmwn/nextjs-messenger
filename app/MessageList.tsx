@@ -16,10 +16,6 @@ const MessageList = ({ initialMessages }: Props) => {
 	const { data: messages, error, mutate } = useSWR("fetchMessages", fetcher);
 
 	useEffect(() => {
-		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-	}, []);
-
-	useEffect(() => {
 		const channel = pusherClient.subscribe("messages");
 
 		channel.bind("newMessage", async (data: Message) => {
@@ -35,7 +31,9 @@ const MessageList = ({ initialMessages }: Props) => {
 			}
 		});
 
-		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+		setTimeout(() => {
+			bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, 500);
 
 		return () => {
 			channel.unbind_all();
