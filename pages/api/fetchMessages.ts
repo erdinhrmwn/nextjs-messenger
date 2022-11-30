@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	const messageRes = await redis.hvals("messages");
-	const messages: Message[] = messageRes.sort((a: Message, b: Message) => b.created_at - a.created_at);
+	const messages: Message[] = messageRes.sort((a: Message, b: Message) => a.created_at - b.created_at);
 
 	res.status(200).json({ success: true, message: null, data: messages });
 }

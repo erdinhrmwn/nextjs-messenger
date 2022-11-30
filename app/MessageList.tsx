@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useSWR from "swr";
 import { Message } from "../interfaces/message";
 import { pusherClient } from "../pusher";
@@ -12,7 +12,12 @@ type Props = {
 };
 
 const MessageList = ({ initialMessages }: Props) => {
+	const bottomRef = useRef<null | HTMLDivElement>(null);
 	const { data: messages, error, mutate } = useSWR("fetchMessages", fetcher);
+
+	useEffect(() => {
+		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, []);
 
 	useEffect(() => {
 		const channel = pusherClient.subscribe("messages");
@@ -30,6 +35,8 @@ const MessageList = ({ initialMessages }: Props) => {
 			}
 		});
 
+		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+
 		return () => {
 			channel.unbind_all();
 			channel.unsubscribe();
@@ -37,10 +44,13 @@ const MessageList = ({ initialMessages }: Props) => {
 	}, [messages, mutate, pusherClient]);
 
 	return (
-		<div className='space-y-5 px-5 pt-8 pb-32 max-w-2xl xl:max-w-4xl mx-auto'>
-			{(messages || initialMessages)?.map((message) => (
-				<MessageComponent message={message} key={message.id} />
-			))}
+		<div>
+			<div className='space-y-5 px-5 pt-8 pb-32 max-w-2xl xl:max-w-4xl mx-auto'>
+				{(messages || initialMessages)?.map((message) => (
+					<MessageComponent message={message} key={message.id} />
+				))}
+			</div>
+			<div ref={bottomRef} />
 		</div>
 	);
 };

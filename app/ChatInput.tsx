@@ -2,9 +2,9 @@
 
 import { unstable_getServerSession } from "next-auth";
 import { FormEvent, useState } from "react";
-import useSWR from "swr";
 import { v4 as uuid } from "uuid";
 import { Message } from "../interfaces/message";
+import useSWR from "swr";
 import fetcher from "../utils/fetchMessages";
 
 type Props = {

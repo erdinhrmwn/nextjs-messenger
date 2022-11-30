@@ -3,9 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
 
-const Header = async () => {
-	const session = await unstable_getServerSession();
+type Props = {
+	session: Awaited<ReturnType<typeof unstable_getServerSession>>;
+};
 
+const Header = ({ session }: Props) => {
 	return (
 		<>
 			{!session ? (
@@ -20,10 +22,6 @@ const Header = async () => {
 							/>
 							<p className='text-blue-400'>Welcome to Messenger</p>
 						</div>
-
-						{/* <Link href='/auth/signin' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
-							Sign In
-						</Link> */}
 					</div>
 				</header>
 			) : (
